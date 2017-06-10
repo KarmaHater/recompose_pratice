@@ -1,35 +1,16 @@
 import React from "react";
 import styles from "./TestStyles";
 import { COLORS } from "../../styles/constants/colors.js";
-import { compose, withReducer, withHandlers } from "recompose";
+import { compose, withState, withHandlers } from "recompose";
 
 const withToggle = compose(
-  withReducer(
-    "toggleOn",
-    "dispatch",
-    (state, action) => {
-      switch (action.type) {
-        case "SHOW":
-          return true;
-          break;
-        case "HIDE":
-          return false;
-          break;
-        case "TOGGLE":
-          return !state;
-          break;
-        default:
-          return state;
-      }
-    },
-    false
-  ),
+  withState('toggleOn', 'toggle', false),
   withHandlers({
-    show: ({ dispatch }) => e => dispatch({ type: "SHOW" }),
-    hide: ({ dispatch }) => e => dispatch({ tpye: "HIDE" }),
-    toggle: ({ dispatch }) => e => dispatch({ tpye: "TOGGLE" })
+    show: ({ toggle }) => (e) => toggle(true),
+    hide: ({ toggle }) => (e) => toggle(false),
+    toggle: ({ toggle }) => (e) => toggle((current) => !current)
   })
-);
+)
 
 const StatusList = () => (
   <div className="StatusList">
@@ -39,10 +20,10 @@ const StatusList = () => (
   </div>
 );
 
-//withReducer (like using the store state instead of internal state)
+//withState
 // first: name of the state object
-// second: becomes the dispatch object.
-// third: is the actual reducer.
+// second: the method you call to change the first varable.
+// third: is the inital state.
 
 const Status = withToggle(({ status, toggleOn, toggle }) => (
   <span onClick={() => toggle(x => !x)}>
@@ -54,7 +35,10 @@ const Status = withToggle(({ status, toggleOn, toggle }) => (
 const ToolTip = withToggle(({ text, children, toggleOn, hide, show }) => (
   <span>
     {toggleOn && <div className="ToopTip">{text}</div>}
-    <span onMouseEnter={show} onMouseLeave={hide}>
+    <span
+      onMouseEnter={show}
+      onMouseLeave={hide}
+    >
       {children}
     </span>
   </span>
@@ -62,8 +46,8 @@ const ToolTip = withToggle(({ text, children, toggleOn, hide, show }) => (
 
 const User = ({ name }) => (
   <ToolTip text={"cool dude"}>
-    <div style={{ backgroundColor: "red", padding: "20px" }}>
-      andra: <Status status={"active"} />
+    <div style={{backgroundColor: 'red', padding: '20px'}}>
+      andra: <Status status={"active"}/>
     </div>
   </ToolTip>
 );
