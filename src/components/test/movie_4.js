@@ -43,6 +43,7 @@ const StatusList = () => (
 // first: name of the state object
 // second: becomes the dispatch object.
 // third: is the actual reducer.
+//fourth: initailstate
 
 const Status = withToggle(({ status, toggleOn, toggle }) => (
   <span onClick={() => toggle(x => !x)}>

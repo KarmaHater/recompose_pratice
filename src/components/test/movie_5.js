@@ -1,5 +1,5 @@
 import React from "react";
-import { compose, lifecycle, withHandlers, withReducer } from "recompose";
+import { compose, lifecycle, withHandlers } from "recompose";
 
 //state always gets converted to props when it gets
 // passed into the wrapper component
